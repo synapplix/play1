@@ -80,15 +80,15 @@ def execute(**kargs):
 
     cpXML = ""
     for el in classpath:
-        if os.path.basename(el) != "conf":
+        if os.path.basename(el) != "conf" and el.endswith('-sources.jar') == False:
             if el == playJarPath:
-                cpXML += '<classpathentry kind="lib" path="%s" sourcepath="%s" />\n\t' % (os.path.normpath(el) , playSourcePath)
+                cpXML += '<classpathentry kind="lib" exported="true" path="%s" sourcepath="%s" />\n\t' % (os.path.normpath(el) , playSourcePath)
             else:
                 if cpJarToSource.has_key(el):
-                    cpXML += '<classpathentry kind="lib" path="%s" sourcepath="%s"/>\n\t' % (os.path.normpath(el), cpJarToSource[el])
+                    cpXML += '<classpathentry kind="lib" exported="true" path="%s" sourcepath="%s"/>\n\t' % (os.path.normpath(el), cpJarToSource[el])
                 else:
                     if javadocLocation.has_key(el):
-                        cpXML += '<classpathentry kind="lib" path="%s">\n\t\t' % os.path.normpath(el)
+                        cpXML += '<classpathentry kind="lib" exported="true" path="%s">\n\t\t' % os.path.normpath(el)
                         cpXML += '<attributes>\n\t\t\t'
                         f = file(javadocLocation[el])
                         url = f.readline()
@@ -97,7 +97,7 @@ def execute(**kargs):
                         cpXML += '</attributes>\n\t'
                         cpXML += '</classpathentry>\n\t'
                     else:
-                        cpXML += '<classpathentry kind="lib" path="%s"/>\n\t' % os.path.normpath(el)
+                        cpXML += '<classpathentry kind="lib" exported="true" path="%s"/>\n\t' % os.path.normpath(el)
     if not is_application:
         cpXML += '<classpathentry kind="src" path="src"/>'
     replaceAll(dotClasspath, r'%PROJECTCLASSPATH%', cpXML)
