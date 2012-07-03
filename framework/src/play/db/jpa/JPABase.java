@@ -13,6 +13,8 @@ import play.exceptions.UnexpectedException;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.io.ObjectStreamException;
+import java.io.InvalidObjectException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.sql.SQLException;
@@ -275,6 +277,32 @@ public class JPABase implements Serializable, play.db.Model {
             keyStr = key.toString();
         }
         return getClass().getSimpleName() + "[" + keyStr + "]";
+    }
+
+    public Object writeReplace() throws ObjectStreamException {
+      JPABaseProxy proxy = new JPABaseProxy();
+      proxy.entityClass = getClass();
+      proxy.key = this._key();
+      return proxy;
+    }
+  
+    public static class JPABaseProxy implements Serializable {
+    
+      private static final long serialVersionUID = 100321918293219L;
+
+      public Class entityClass;
+    
+      public Object key;
+    
+      public Object readResolve() throws ObjectStreamException {
+        try {
+          return Model.Manager.factoryFor(entityClass).findById(key);
+        } catch (Exception e) {
+          InvalidObjectException ioe = new InvalidObjectException(entityClass.getName());
+          ioe.setStackTrace(e.getStackTrace());
+          throw ioe;
+        }
+      }
     }
 
     public static class JPAQueryException extends RuntimeException {
