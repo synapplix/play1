@@ -338,8 +338,7 @@ public class DBPlugin extends PlayPlugin {
             return this.driver.jdbcCompliant();
         }
 
-        @Override
-        public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
+         public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
           // TODO Auto-generated method stub
           return null;
         } 
