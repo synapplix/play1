@@ -116,7 +116,7 @@ public class DBPlugin extends PlayPlugin {
                     }
 
                     System.setProperty("com.mchange.v2.log.MLog", "com.mchange.v2.log.FallbackMLog");
-                    System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "OFF");
+                    System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "FINEST");
                     ComboPooledDataSource ds = new ComboPooledDataSource();
                     ds.setDriverClass(p.getProperty("db.driver"));
                     ds.setJdbcUrl(p.getProperty("db.url"));
