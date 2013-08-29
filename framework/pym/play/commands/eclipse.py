@@ -141,11 +141,20 @@ def execute(**kargs):
         replaceAll(os.path.join(app.path, 'eclipse/test.launch'), r'%PLAY_VERSION%', play_env["version"])
         replaceAll(os.path.join(app.path, 'eclipse/test.launch'), r'%VM_ARGUMENTS%', vm_arguments)
 
+        replaceAll(os.path.join(app.path, 'eclipse/webtest.launch'), r'%PROJECT_NAME%', application_name)
+        replaceAll(os.path.join(app.path, 'eclipse/webtest.launch'), r'%SYNRUNNER%', app.path)
+        replaceAll(os.path.join(app.path, 'eclipse/webtest.launch'), r'%PLAY_BASE%', play_env["basedir"])
+        replaceAll(os.path.join(app.path, 'eclipse/webtest.launch'), r'%PLAY_ID%', play_env["id"])
+        replaceAll(os.path.join(app.path, 'eclipse/webtest.launch'), r'%JPDA_PORT%', str(app.jpda_port))
+        replaceAll(os.path.join(app.path, 'eclipse/webtest.launch'), r'%PLAY_VERSION%', play_env["version"])
+        replaceAll(os.path.join(app.path, 'eclipse/webtest.launch'), r'%VM_ARGUMENTS%', vm_arguments)
+
         replaceAll(os.path.join(app.path, 'eclipse/connect.launch'), r'%PROJECT_NAME%', application_name)
         replaceAll(os.path.join(app.path, 'eclipse/connect.launch'), r'%JPDA_PORT%', str(app.jpda_port))
 
         os.rename(os.path.join(app.path, 'eclipse/connect.launch'), os.path.join(app.path, 'eclipse/Connect JPDA to %s.launch' % application_name))
         os.rename(os.path.join(app.path, 'eclipse/test.launch'), os.path.join(app.path, 'eclipse/Test %s.launch' % application_name))
+        os.rename(os.path.join(app.path, 'eclipse/webtest.launch'), os.path.join(app.path, 'eclipse/WebTest %s.launch' % application_name))
         os.rename(os.path.join(app.path, 'eclipse/debug.launch'), os.path.join(app.path, 'eclipse/%s.launch' % application_name))
 
     print "~ OK, the application is ready for eclipse"
