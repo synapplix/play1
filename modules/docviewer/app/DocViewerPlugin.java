@@ -16,7 +16,7 @@ public class DocViewerPlugin extends PlayPlugin {
             return true;
         }
         if (request.path.startsWith("/@api/")) {
-            if(request.path.matches("/@api/-[a-z]+/.*")) {
+            if(request.path.matches("/@api/-[a-z]+[0-9]*/.*")) {
                 String module = request.path.substring(request.path.indexOf("-")+1);
                 module = module.substring(0, module.indexOf("/"));
                 VirtualFile f = Play.modules.get(module).child("documentation/api/"+request.path.substring(8+module.length()));

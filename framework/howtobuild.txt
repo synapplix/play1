@@ -1,0 +1,2 @@
+# ant is required! then call
+ant -Dversion=1.2.5rc2
