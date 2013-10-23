@@ -11,6 +11,10 @@
         <fileset dir="lib">
             <include name="*.jar"/>
         </fileset>
+        <fileset dir="lib-test">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="\${java.home}" includes="lib/jce.jar"/>
     </path>
 
     <path id="classpath.test">
