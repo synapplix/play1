@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.FutureTask;
+
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.bytecode.SourceFileAttribute;
@@ -147,24 +148,30 @@ public class Java {
         for (int i = 0; i < args.length; i++) {
             types[i] = args[i].getClass();
         }
-        Method m = null;
-        while (!clazz.equals(Object.class) && m == null) {
-            try {
-                m = clazz.getDeclaredMethod(method, types);
-            } catch (Exception e) {
-                clazz = clazz.getSuperclass();
-            }
-        }
-        if (m != null) {
-            m.setAccessible(true);
-            if (Modifier.isStatic(m.getModifiers())) {
-                return m.invoke(null, args);
-            } else {
-                Object instance = m.getDeclaringClass().getDeclaredField("MODULE$").get(null);
-                return m.invoke(instance, args);
-            }
-        }
-        throw new NoSuchMethodException(method);
+        return invokeStaticOrParent(clazz, types, method, args);
+    }
+
+
+    public static Object invokeStaticOrParent(Class<?> clazz, Class[] types, String method, Object... args)
+        throws Exception {
+      Method m = null;
+      while (!clazz.equals(Object.class) && m == null) {
+          try {
+              m = clazz.getDeclaredMethod(method, types);
+          } catch (Exception e) {
+              clazz = clazz.getSuperclass();
+          }
+      }
+      if (m != null) {
+          m.setAccessible(true);
+          if (Modifier.isStatic(m.getModifiers())) {
+              return m.invoke(null, args);
+          } else {
+              Object instance = m.getDeclaringClass().getDeclaredField("MODULE$").get(null);
+              return m.invoke(instance, args);
+          }
+      }
+      throw new NoSuchMethodException(method);
     }
 
     public static Object invokeChildOrStatic(Class<?> clazz, String method, Object... args) throws Exception {
