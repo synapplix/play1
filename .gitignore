@@ -3,7 +3,6 @@ framework/classes
 framework/test-classes
 framework/out
 framework/.idea
-framework/play.jar
 .DS_Store
 nbproject/genfiles.properties
 nbproject/jdk.xml
@@ -12,11 +11,7 @@ nbproject/nbjdk.xml
 nbproject/private
 framework/tests-results
 framework/src/version
-framework/src/play/version
-framework/src/play/version
-framework/src/play/version
 framework/tests/test-application/db
-framework/play-*.jar
 framework/docs
 samples-and-tests/*/test-result/
 
@@ -43,7 +38,6 @@ resources/nbproject/private
 modules/gae/lib/gae.jar
 catalog.xml
 modules/gae/lib/gae.jar
-play-*.jar
 modules/gae/bin
 modules/gwt/lib/play-gwt.jar
 tmp
