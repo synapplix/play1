@@ -8,6 +8,7 @@ import org.hibernate.EmptyInterceptor;
 import org.hibernate.collection.spi.PersistentCollection;
 import org.hibernate.ejb.Ejb3Configuration;
 import org.hibernate.type.Type;
+
 import play.Invoker.InvocationContext;
 import play.Logger;
 import play.Play;
@@ -24,6 +25,7 @@ import play.exceptions.UnexpectedException;
 import play.utils.Utils;
 
 import javax.persistence.*;
+
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -38,6 +40,7 @@ import java.util.*;
 public class JPAPlugin extends PlayPlugin {
 
     public static boolean autoTxs = true;
+    public static boolean modelChanged = true;
 
     @Override
     public Object bind(RootParamNode rootParamNode, String name, Class clazz, java.lang.reflect.Type type, Annotation[] annotations) {
@@ -123,6 +126,9 @@ public class JPAPlugin extends PlayPlugin {
 
             if (!Play.configuration.getProperty("jpa.ddl", Play.mode.isDev() ? "update" : "none").equals("none")) {
                 cfg.setProperty("hibernate.hbm2ddl.auto", Play.configuration.getProperty("jpa.ddl", "update"));
+            }
+            if (!modelChanged) { // speedup if models not changed
+              cfg.setProperty("hibernate.hbm2ddl.auto", "none");
             }
 
             cfg.setProperty("hibernate.dialect", getDefaultDialect(Play.configuration.getProperty("db.driver")));
@@ -848,4 +854,20 @@ public class JPAPlugin extends PlayPlugin {
             return modelProperty;
         }
     }
+
+  @Override
+  public boolean detectClassesChange() {
+    if (!Play.started || Play.mode.isProd()) {
+      JPAPlugin.modelChanged = true;
+    } else {
+      JPAPlugin.modelChanged = false;
+      for (ApplicationClass applicationClass : Play.classes.getAssignableClasses(JPABase.class)) {
+        if (applicationClass.timestamp < applicationClass.javaFile.lastModified()) {
+            JPAPlugin.modelChanged = true;
+            break;
+        }
+      }
+    }
+    return super.detectClassesChange();
+  }
 }
