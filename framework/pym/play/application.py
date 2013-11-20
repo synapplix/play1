@@ -294,6 +294,7 @@ class PlayApplication(object):
 
         if self.readConf('application.mode').lower() == 'dev':
             self.check_jpda()
+#            java_args.append('-agentlib:JPIBootLoader=JPIAgent:server=controlled;CGProf;HeapProf;ThreadProf')
             java_args.append('-Xdebug')
             java_args.append('-Xrunjdwp:transport=dt_socket,address=%s,server=y,suspend=n' % self.jpda_port)
             java_args.append('-Dplay.debug=yes')
