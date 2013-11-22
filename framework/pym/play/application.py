@@ -292,9 +292,11 @@ class PlayApplication(object):
             
         java_args.append('-Dfile.encoding=utf-8')
 
+#        java_args.append('-agentlib:JPIBootLoader=JPIAgent:server=controlled;CGProf')
+#        java_args.append('-agentlib:JPIBootLoader=JPIAgent:server=standalone;CGProf:execdetails=true')
+        java_args.append('-Xverify:none')
         if self.readConf('application.mode').lower() == 'dev':
             self.check_jpda()
-#            java_args.append('-agentlib:JPIBootLoader=JPIAgent:server=controlled;CGProf;HeapProf;ThreadProf')
             java_args.append('-Xdebug')
             java_args.append('-Xrunjdwp:transport=dt_socket,address=%s,server=y,suspend=n' % self.jpda_port)
             java_args.append('-Dplay.debug=yes')
