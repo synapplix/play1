@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>#{get 'title' /}</title>
+        <meta charset="${_response_encoding}">
+        #{greenscript.css 'tab', output: 'all'/}
+        #{greenscript.js 'jquery-1.6.2', output: 'all'/}
+    </head>
+    <body>
+        #{doLayout /}
+    </body>
+</html>

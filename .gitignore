@@ -1,3 +1,4 @@
+data
 bin
 framework/classes
 framework/test-classes
@@ -46,7 +47,6 @@ logs
 logs
 tmp
 db
-*.pyc
 test-result
 samples-and-tests/with-gwt/nbproject
 samples-and-tests/jobboard/db
@@ -135,6 +135,9 @@ samples-and-tests/zencontact/precompiled
 !modules/grizzly
 !modules/secure
 !modules/testrunner
+!modules/greenscript-*
+!modules/logisimayml-*
 !framework/src/play/db
+*.py[cod]
 .idea
 *~
