@@ -52,4 +52,4 @@ def main_help(commands, play_env):
     print "~"
 
 def isCore(mod, play_env):
-    return mod.__file__.find(play_env["basedir"]) == 0
+    return mod.__file__.find('%s/framework/pym/play' % play_env["basedir"]) == 0
