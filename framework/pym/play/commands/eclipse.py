@@ -113,6 +113,7 @@ def execute(**kargs):
     if len(modules):
         lXML = ""
         cXML = ""
+        tXML = ""
         for module in modules:
             lXML += '<link><name>%s</name><type>2</type><location>%s</location></link>\n' % (os.path.basename(module), os.path.join(module, 'app').replace('\\', '/'))
             if os.path.exists(os.path.join(module, "conf")):
@@ -120,10 +121,11 @@ def execute(**kargs):
             if os.path.exists(os.path.join(module, "public")):
                 lXML += '<link><name>public/%s</name><type>2</type><location>%s/public</location></link>\n' % (os.path.basename(module), module.replace('\\', '/'))
             if os.path.exists(os.path.join(module, 'test/%s' % (os.path.basename(module)))):
-                lXML += '<link><name>test/%s</name><type>2</type><location>%s/test/%s</location></link>\n' % (os.path.basename(module), module.replace('\\', '/'),os.path.basename(module))
+                lXML += '<link><name>%stest</name><type>2</type><location>%s/test</location></link>\n' % (os.path.basename(module), module.replace('\\', '/'))
+                tXML += '<classpathentry kind="src" path="%stest"/>\n\t' % (os.path.basename(module))
             cXML += '<classpathentry kind="src" path="%s"/>\n\t' % (os.path.basename(module))
         replaceAll(dotProject, r'%LINKS%', '<linkedResources>%s</linkedResources>' % lXML)
-        replaceAll(dotClasspath, r'%MODULES%', cXML)
+        replaceAll(dotClasspath, r'%MODULES%', cXML+tXML)
     else:
         replaceAll(dotProject, r'%LINKS%', '')
         replaceAll(dotClasspath, r'%MODULES%', '')
