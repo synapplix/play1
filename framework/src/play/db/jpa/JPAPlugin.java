@@ -217,7 +217,6 @@ public class JPAPlugin extends PlayPlugin {
 				@Override
 				public void afterTransactionCompletion(org.hibernate.Transaction tx) {
 					entities.remove();
-          PlayPlugin.postEvent("JPASupport.afterTransactionCompletion", tx);
 				}
 				
 			});
