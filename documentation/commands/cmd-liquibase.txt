@@ -1,0 +1,44 @@
+~ Name:
+~ ~~~~~
+~ liquibase -- Run liquibase commands
+~
+~ Alias:
+~ ~~~~~
+~ lb
+~ 
+~ Synopsis:
+~ ~~~~~~~~~
+~ play lb:install [--file=<relative path to xml>] [--context=ctx1,ctx2] [--quit=<[true]|false>]
+~ play lb:update [--file=<relative path to xml>] [--context=ctx1,ctx2] [--quit=<[true]|false>]
+~ [ play lb:diff ] [ --file=<relative path to xml> ]
+~
+~ Description:
+~ ~~~~~~~~~~~~
+~ Track and organize your database schema evolutions
+~ The liquibase plugin tracks your database evolutions using several "liquibase changelog files and state tables".
+~ The scripts are written in XML with a liquibase schema.
+~ By defaults the XML-files are located in the conf/db directory of your application.
+~
+~ Options:
+~ ~~~~~~~~
+~
+~ --file=.* :
+~   set a relative path to a liquibase database changelog XML file which will be executed
+~   default: *lb:install :=> 'conf/db/install.xml'
+~            *lb:update  :=> 'conf/db/update.xml'
+~
+~ --context=.* :
+~   specify various context names for which changesets from the database changelog should be executed
+~   default: app.readconf('liquibase.defaultcontext')
+~
+~ --quit=.* :
+~   quit the play execution after liquibase command execution
+~   default: true
+~
+~ s(i/a)mple install:
+~   play lb:install
+~   play lb:update
+~
+~ s(i/a)mple update:
+~   play lb:update
+~
