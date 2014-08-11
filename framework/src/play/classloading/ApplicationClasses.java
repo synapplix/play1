@@ -46,10 +46,14 @@ public class ApplicationClasses {
      * @return The ApplicationClass or null
      */
     public ApplicationClass getApplicationClass(String name) {
-        if (!classes.containsKey(name) && getJava(name) != null) {
-            classes.put(name, new ApplicationClass(name));
+        VirtualFile javaFile = getJava(name);
+        if(javaFile != null){
+            if (!classes.containsKey(name)) {
+                classes.put(name, new ApplicationClass(name));
+            }
+            return classes.get(name);
         }
-        return classes.get(name);
+        return null;
     }
 
     /**
@@ -314,11 +318,9 @@ public class ApplicationClasses {
 
     // ~~ Utils
     /**
-     * Retrieve the corresponding source file for a given class name. It handles
-     * innerClass too !
-     * 
-     * @param name
-     *          The fully qualified class name
+     * Retrieve the corresponding source file for a given class name.
+     * It handles innerClass too !
+     * @param name The fully qualified class name 
      * @return The virtualFile if found
      */
     public static VirtualFile getJava(String name) {
@@ -326,22 +328,21 @@ public class ApplicationClasses {
         if (fileName.contains("$")) {
             fileName = fileName.substring(0, fileName.indexOf("$"));
         }
+        // the local variable fileOrDir is important!
         String fileOrDir = fileName.replace(".", "/");
         fileName = fileOrDir + ".java";
         for (VirtualFile path : Play.javaPath) {
+            // 1. check if there is a folder (without extension)
             VirtualFile javaFile = path.child(fileOrDir);
-            if (javaFile.exists() && javaFile.isDirectory()) {
+                  
+            if (javaFile.exists() && javaFile.isDirectory() && javaFile.matchName(fileOrDir)) {
+                // we found a directory (package)
                 return null;
             }
+            // 2. check if there is a file
             javaFile = path.child(fileName);
-            if (javaFile.exists()) {
-                try {
-                    if (!fileName.endsWith(javaFile.getRealFile().getCanonicalFile().getName())) {
-                        return null;
-                    }
-                } catch (IOException e) {
-                }
-              return javaFile;
+            if (javaFile.exists() && javaFile.matchName(fileName)) {
+                return javaFile;
             }
         }
         return null;
