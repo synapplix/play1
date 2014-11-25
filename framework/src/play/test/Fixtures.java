@@ -574,8 +574,10 @@ public class Fixtures {
 
                     // Then we disable all foreign keys
                 exec = connection.createStatement();
-                for (String tableName:names)
+                for (String tableName:names) {
+                    if (tableName.startsWith("trace_xe_")) continue;
                     exec.addBatch("ALTER TABLE \"" + tableName + "\" NOCHECK CONSTRAINT ALL");
+                }
                 exec.executeBatch();
                 exec.close();
 
