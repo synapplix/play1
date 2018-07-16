@@ -23,7 +23,7 @@ import java.util.*;
  */
 public abstract class Binder {
     public static final Object MISSING = new Object();
-    private static final Object DIRECTBINDING_NO_RESULT = new Object();
+    public static final Object DIRECTBINDING_NO_RESULT = new Object();
     public static final Object NO_BINDING = new Object();
 
     static final Map<Class<?>, TypeBinder<?>> supportedTypes = new HashMap<>();
