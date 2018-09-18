@@ -176,7 +176,20 @@ public class JPAPlugin extends PlayPlugin {
     protected EntityManagerFactory newEntityManagerFactory(String dbName, Configuration dbConfig) {
         PersistenceUnitInfo persistenceUnitInfo = persistenceUnitInfo(dbName, dbConfig);
         Map<String, Object> configuration = new HashMap<>();
-        configuration.put(AvailableSettings.INTERCEPTOR, new HibernateInterceptor());
+
+        if (dbConfig.getProperty(AvailableSettings.INTERCEPTOR) != null) {
+            try {
+                configuration.put(AvailableSettings.INTERCEPTOR, Play.classloader.loadClass(dbConfig.getProperty(AvailableSettings.INTERCEPTOR)).newInstance());
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            configuration.put(AvailableSettings.INTERCEPTOR, new HibernateInterceptor());
+        }
 
         return new EntityManagerFactoryBuilderImpl(
                 new PersistenceUnitInfoDescriptor(persistenceUnitInfo), configuration
